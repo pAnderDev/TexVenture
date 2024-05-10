@@ -6,6 +6,8 @@ import Home from './Pages/Home.jsx';
 import About from './Pages/About.jsx';
 import HowToPlay from './Pages/HowToPlay.jsx';
 import Settings from './Pages/Settings.jsx';
+import SignUp from './Pages/SignUp.jsx';
+import Login from './Pages/Login.jsx';
 
 function App() {
   return (
@@ -18,6 +20,8 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path="/howtoplay" element={<HowToPlay />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/register" element={<SignUp />} />
+            <Route path="/login" element={<Login />} />
           </Routes>
         </div>
       </div>
