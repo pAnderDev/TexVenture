@@ -1,0 +1,38 @@
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: grey;
+}
+
+header h1 {
+    margin: 0;
+}
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 15px; /* Space between links */
+}
+
+nav li {
+    margin: 0;
+    align-items: center;
+}
+
+nav a {
+    text-decoration: none;
+    color: #007bff; /* Bootstrap blue */
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+hr {
+    margin-top: 10px;
+    border: 1px solid #dee2e6; /* Light grey line */
+}
