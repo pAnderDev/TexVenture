@@ -23,7 +23,7 @@ function Login() {
                 toast.error(data.error)
             } else {
                 setData({}); //reset the form
-                navigate('/')
+                navigate('/account')
             }
         } catch(error) {
 

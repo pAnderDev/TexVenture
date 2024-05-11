@@ -1,7 +1,7 @@
 //create REST functions here
 const User = require('../models/User')
 const { hashPassword, comparePasswords } = require('../helpers/auth')
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
 
 const test = (req, res) => {
     res.json('test is working')
@@ -60,10 +60,9 @@ const loginUser = async (req, res) => {
         //check if passwords match
         const match = await comparePasswords(password, user.password)
         if(match) {
-            res.json('Login Sucessful')
             jwt.sign({email: user.email, id: user._id, username: user.username}, process.env.JWT_SECRET, {}, (err, token) => {
                 if(err) throw err;
-                res.cookie('token', token).json(user)
+                res.cookie('token', token).json(user);
             })
         } else {
             return res.json({
@@ -76,9 +75,22 @@ const loginUser = async (req, res) => {
     }
 }
 
+const getProfile = (req, res) => {
+    const{token} = req.cookies
+    if(token) {
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+            if(err) throw err;
+            res.json(user)
+        })
+    } else {
+        res.json(null)
+    }
+}
+
 
 module.exports = {
     test,
     registerUser,
-    loginUser
+    loginUser,
+    getProfile
 }

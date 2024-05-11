@@ -9,13 +9,16 @@ import Settings from './Pages/Settings.jsx';
 import Register from './Pages/Register.jsx';
 import Login from './Pages/Login.jsx';
 import axios from 'axios';
-import { Toaster } from "react-hot-toast" 
+import { Toaster } from "react-hot-toast"
+import { UserContextProvider } from '../context/userContext.jsx';
+import Account from './Pages/Account.jsx';
 
 axios.defaults.baseURL = 'http://localhost:5050'
 axios.defaults.withCredentials = true
 
 function App() {
   return (
+    <UserContextProvider>
     <Router>
       <Header />
       <Toaster position='bottom-right' toastOptions={{duration: 2000}} />
@@ -28,11 +31,13 @@ function App() {
             <Route path="/settings" element={<Settings />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/account" element={<Account />} />
           </Routes>
         </div>
       </div>
       <Footer />
     </Router>
+    </UserContextProvider>
   );
 }
 
