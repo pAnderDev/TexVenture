@@ -1,9 +1,13 @@
 //create REST functions here
 const User = require('../models/User')
+const { hashPassword, comparePasswords } = require('../helpers/auth')
+const jwt = require('jsonwebtoken')
+
 const test = (req, res) => {
     res.json('test is working')
 }
 
+//Register endpoint
 const registerUser = async (req, res) => {
     try {
         const {username, email, password} = req.body;
@@ -27,8 +31,11 @@ const registerUser = async (req, res) => {
             })
         }
 
+        const hashedPassword = await hashPassword(password)
         const user = await User.create({
-            username, email, password
+            username, 
+            email, 
+            password: hashedPassword,
         })
 
         return res.json(user)
@@ -37,7 +44,41 @@ const registerUser = async (req, res) => {
     }
 }
 
+//Login endpoint
+const loginUser = async (req, res) => {
+    try {
+        const {email, password} = req.body;
+
+        //check if user exists
+        const user = await User.findOne({email});
+        if(!user) {
+            return res.json({
+                error: "No user with that email"
+            })
+        } 
+
+        //check if passwords match
+        const match = await comparePasswords(password, user.password)
+        if(match) {
+            res.json('Login Sucessful')
+            jwt.sign({email: user.email, id: user._id, username: user.username}, process.env.JWT_SECRET, {}, (err, token) => {
+                if(err) throw err;
+                res.cookie('token', token).json(user)
+            })
+        } else {
+            return res.json({
+                error: "Incorrect password"
+            })
+        }
+    } catch (error) {
+        console.log(error)
+
+    }
+}
+
+
 module.exports = {
     test,
-    registerUser
+    registerUser,
+    loginUser
 }

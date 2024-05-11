@@ -38,7 +38,7 @@ function Register() {
                 <h2>Register</h2>
                 <form onSubmit={registerUser}>
                     <div className="mb-3">
-                        <label><strong>Name<input type="text" placeholder="Enter Username" autoComplete="off" name="username" className="form-control rounded-0" value={data.username} onChange={(e) => setData({...data, username: e.target.value})} /></strong></label>
+                        <label><strong>Username<input type="text" placeholder="Enter Username" autoComplete="off" name="username" className="form-control rounded-0" value={data.username} onChange={(e) => setData({...data, username: e.target.value})} /></strong></label>
                     </div>
                     <div className="mb-3">
                         <label><strong>Email<input type="email" placeholder="Enter Email" autoComplete="off" name="email" className="form-control rounded-0" value={data.email} onChange={(e) => setData({...data, email: e.target.value})} /></strong></label>
