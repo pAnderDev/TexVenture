@@ -5,7 +5,7 @@ export const UserContext = createContext({})
 
 export function UserContextProvider({children}) {
     const [user, setUser ] = useState(null);
-    //everytime you go to a page check if there is a use
+    //everytime you go to a page check if there is a user
     useEffect(() => {
         if(!user) {
             axios.get('/profile').then(({data}) => {

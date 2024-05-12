@@ -2,6 +2,8 @@ import { useState } from "react"
 import axios from 'axios'
 import {toast} from 'react-hot-toast'
 import { useNavigate } from "react-router-dom";
+import { Link } from 'react-router-dom';
+
 
 function Login() {
     
@@ -26,17 +28,20 @@ function Login() {
                 navigate('/account')
             }
         } catch(error) {
-
+            
         }
     }
 
     return(
         <div>
+            <h2>Log In</h2>
             <form onSubmit={loginUser}>
                 <label>Email<input type="email" placeholder="Enter email" autoComplete="false" value={data.email} onChange={(e) => setData({...data, email: e.target.value})}/></label>
                 <label>Password<input type="password" placeholder="Enter password" autoComplete="false" value={data.password} onChange={(e) => setData({...data, password: e.target.value})}/></label>
             <button type="submit">Login</button>
             </form>
+            <p>Need an Account? Register</p>
+            <Link to="/register">Register</Link>
         </div>
     )
 }
