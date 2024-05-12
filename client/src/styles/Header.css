@@ -1,10 +1,10 @@
 nav li:first-child {
     margin-right: auto;
+    font-size: 24px;
 }
 
 nav {
-    background-color: aquamarine;
-    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.1);
+    background-color: #00000071;
 }
 
 nav ul {
@@ -25,5 +25,9 @@ nav a{
     text-decoration: none;
     display: flex;
     align-items: center;
-    color: black;
-  }
+    color: white;
+}
+
+#link:hover {
+    background-color: rgba(136, 131, 131, 0.489);
+}

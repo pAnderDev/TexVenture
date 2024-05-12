@@ -5,7 +5,7 @@
 
 body{
     min-height: 100vh;
-    color: white;
+    color: rgb(0, 0, 0);
 }
 
 .background {
@@ -17,6 +17,24 @@ body{
     width: 100%;
     display: flex;
     flex-direction: column;
+    background-color: white;
 
 }
+
+.content-block {
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    min-height: 70vh; 
+}
+
+.border {
+    width: 90%;
+    border: 1px solid black;
+    padding: 6vh;
+    border-radius: 10px;
+    min-height: 50vh;
+    background-color: rgb(255, 255, 255);
+}
+
 

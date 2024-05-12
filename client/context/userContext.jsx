@@ -11,8 +11,11 @@ export function UserContextProvider({children}) {
             axios.get('/profile').then(({data}) => {
                 setUser(data)
             })
+            .catch((error) => {
+                console.error('Failed to retrieve user profile', error);
+            });
         }
-    }, [])
+    }, []);
     return (
         <UserContext.Provider value={{user, setUser}}>
             {children}
