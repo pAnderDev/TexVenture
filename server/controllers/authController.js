@@ -3,10 +3,6 @@ const User = require('../models/User')
 const { hashPassword, comparePasswords } = require('../helpers/auth')
 const jwt = require('jsonwebtoken');
 
-const test = (req, res) => {
-    res.json('test is working')
-}
-
 //Register endpoint
 const registerUser = async (req, res) => {
     try {
@@ -36,6 +32,8 @@ const registerUser = async (req, res) => {
             username, 
             email, 
             password: hashedPassword,
+            date_created: new Date(),
+            last_login: new Date()
         })
 
         return res.json(user)
@@ -64,6 +62,7 @@ const loginUser = async (req, res) => {
                 if(err) throw err;
                 res.cookie('token', token).json(user);
             })
+            user.last_login= new Date()
         } else {
             return res.json({
                 error: "Incorrect password"
@@ -94,7 +93,6 @@ const logoutUser = (req, res) => {
 
 
 module.exports = {
-    test,
     registerUser,
     loginUser,
     getProfile,
