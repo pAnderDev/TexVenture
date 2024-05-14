@@ -25,7 +25,7 @@ function Login() {
             } else {
                 setUser(responseData);
                 setData({}); // reset the form
-                navigate('/account');
+                navigate('/');
             }
         } catch (error) {
             toast.error('Login failed');

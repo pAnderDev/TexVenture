@@ -5,12 +5,28 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 
 function Home() {
+  const { user, setUser } = useContext(UserContext)
+  const navigate = useNavigate()
+
+  const handleCreateCharacter = () => {
+    navigate('/create');
+  };
+
+
   return(
     <div>
       <h1>TexVenture</h1>
-      <button>Play Game</button>
-      <br></br>
-      <button>Create Character</button>
+      {user ? (
+        <>
+          <button>Play Game</button>
+          <br></br>
+          <button onClick={handleCreateCharacter}>Create Character</button>
+        </>
+      ): (
+        <p>
+          Please <Link to="/login">login</Link> to start your adventure!.
+        </p>
+      )}
     </div>
   );
 }

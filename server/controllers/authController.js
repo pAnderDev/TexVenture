@@ -1,5 +1,8 @@
 //create REST functions here
 const User = require('../models/User')
+const Character = require('../models/Character')
+const Race = require('../models/Race')
+const Class = require('../models/Class')
 const { hashPassword, comparePasswords } = require('../helpers/auth')
 const jwt = require('jsonwebtoken');
 
@@ -74,6 +77,87 @@ const loginUser = async (req, res) => {
     }
 }
 
+const createCharacter = async (req, res) => {
+    const { token } = req.cookies;
+    
+    if(token) {
+        jwt.verify(token, process.env.JWT_SECRET, {}, async (err, user) => {
+            if(err) return res.json({error: "Invalid token"});
+
+            try {
+                const {name, classID, raceID, level_info, attributes, initiative, health, spell_slots, spellbook, additional_features} = req.body;
+
+                // Make sure the classID and raceID are correctly passed
+                if (!classID || !raceID) {
+                    return res.status(400).json({ error: "classID and raceID are required" });
+                }
+  
+                const selectedClass = await Class.findById(classID);
+                const selectedRace = await Race.findById(raceID);
+
+                if (!selectedClass || !selectedRace) {
+                    return res.status(404).json({ error: "Class or Race not found" });
+                }
+                
+                const initialAttributes = {
+                    str: selectedRace.attributes.str + attributes.str,
+                    dex: selectedRace.attributes.dex + attributes.dex,
+                    con: selectedRace.attributes.con + attributes.con,
+                    int: selectedRace.attributes.int + attributes.int,
+                    wis: selectedRace.attributes.wis + attributes.wis,
+                    cha: selectedRace.attributes.cha + attributes.cha,
+                }
+                const newCharacter = await Character.create({
+                    user_id: user.id,
+                    name,
+                    class: selectedClass._id,
+                    race: selectedRace._id,
+                    level_info,
+                    attributes: initialAttributes,
+                    armorClass: selectedClass.armorClass,
+                    initiative,
+                    health,
+                    spell_slots,
+                    spellbook,
+                    additional_features,
+                    created_at: new Date(),
+                    updated_at: new Date()
+
+                });
+
+                return res.json(newCharacter);
+            } catch(error) {
+                console.log(error);
+                return res.json({error: "Failed to create character"});
+            }
+        });
+    } else {
+        res.json({error: "No token provided"});
+    }
+};
+
+const getClassData = async (req, res) => {
+    try {
+      const classes = await Class.find();
+      res.json(classes);
+    } catch (error) {
+      console.error('Error fetching class data:', error);
+      res.status(500).json({ error: 'Server error' });
+    }
+  };
+  
+  // Get all race data
+  const getRaceData = async (req, res) => {
+    try {
+      const races = await Race.find();
+      res.json(races);
+    } catch (error) {
+      console.error('Error fetching race data:', error);
+      res.status(500).json({ error: 'Server error' });
+    }
+  };
+
+
 const getProfile = (req, res) => {
     const{token} = req.cookies
     if(token) {
@@ -96,5 +180,8 @@ module.exports = {
     registerUser,
     loginUser,
     getProfile,
-    logoutUser
+    logoutUser,
+    createCharacter,
+    getClassData,
+    getRaceData
 }
