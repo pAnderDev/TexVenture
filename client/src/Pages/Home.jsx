@@ -12,13 +12,17 @@ function Home() {
     navigate('/create');
   };
 
+  const handlePlayGame = () => {
+    navigate('/characters');
+  };
+
 
   return(
     <div>
       <h1>TexVenture</h1>
       {user ? (
         <>
-          <button>Play Game</button>
+          <button onClick={handlePlayGame}>Play Game</button>
           <br></br>
           <button onClick={handleCreateCharacter}>Create Character</button>
         </>

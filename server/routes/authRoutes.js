@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router()
 const cors = require('cors')
-const { registerUser, loginUser, getProfile, logoutUser, createCharacter, getClassData, getRaceData } = require('../controllers/authController')
+const { registerUser, loginUser, getProfile, logoutUser, createCharacter, getClasses, getRaces, getCharactersByUser } = require('../controllers/authController')
 
 //middleware
 router.use(
@@ -16,8 +16,9 @@ router.post('/login', loginUser)
 router.get('/profile', getProfile)
 router.post('/logout', logoutUser)
 router.post('/create', createCharacter)
-router.get('/classes', getClassData)
-router.get('/races', getRaceData)
+router.get('/classes', getClasses)
+router.get('/races', getRaces)
+router.get('/characters', getCharactersByUser)
 
 
 module.exports = router

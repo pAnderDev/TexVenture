@@ -85,44 +85,25 @@ const createCharacter = async (req, res) => {
             if(err) return res.json({error: "Invalid token"});
 
             try {
-                const {name, classID, raceID, level_info, attributes, initiative, health, spell_slots, spellbook, additional_features} = req.body;
+                const {name, classId, raceId} = req.body;
 
                 // Make sure the classID and raceID are correctly passed
-                if (!classID || !raceID) {
-                    return res.status(400).json({ error: "classID and raceID are required" });
+                if (!classId || !raceId) {
+                    return res.status(400).json({ error: "classID and raceID are required"});
                 }
   
-                const selectedClass = await Class.findById(classID);
-                const selectedRace = await Race.findById(raceID);
+                const selectedClass = await Class.findById(classId);
+                const selectedRace = await Race.findById(raceId);
 
                 if (!selectedClass || !selectedRace) {
                     return res.status(404).json({ error: "Class or Race not found" });
                 }
                 
-                const initialAttributes = {
-                    str: selectedRace.attributes.str + attributes.str,
-                    dex: selectedRace.attributes.dex + attributes.dex,
-                    con: selectedRace.attributes.con + attributes.con,
-                    int: selectedRace.attributes.int + attributes.int,
-                    wis: selectedRace.attributes.wis + attributes.wis,
-                    cha: selectedRace.attributes.cha + attributes.cha,
-                }
                 const newCharacter = await Character.create({
-                    user_id: user.id,
+                    user: user.id,
                     name,
-                    class: selectedClass._id,
-                    race: selectedRace._id,
-                    level_info,
-                    attributes: initialAttributes,
-                    armorClass: selectedClass.armorClass,
-                    initiative,
-                    health,
-                    spell_slots,
-                    spellbook,
-                    additional_features,
-                    created_at: new Date(),
-                    updated_at: new Date()
-
+                    class: selectedClass.name,
+                    race: selectedRace.name,
                 });
 
                 return res.json(newCharacter);
@@ -136,7 +117,28 @@ const createCharacter = async (req, res) => {
     }
 };
 
-const getClassData = async (req, res) => {
+const getCharactersByUser = async (req, res) => {
+    const { token } = req.cookies;
+
+    if(token) {
+        jwt.verify(token, process.env.JWT_SECRET, {}, async (err, user) => {
+            if(err) return res.json({error: "Invalid token"});
+
+            try {
+                //gather the list of all characters 
+                const characters = await Character.find({ user: user.id });
+                return res.json(characters);
+            } catch (error) {
+                console.log("Error fetching characters:", error);
+                return res.status(500).json({ error: "Failed to fetch characters" });
+            }
+        });
+    } else {
+        res.json({error: "No token provided"});
+    }
+};
+
+const getClasses = async (req, res) => {
     try {
       const classes = await Class.find();
       res.json(classes);
@@ -147,7 +149,7 @@ const getClassData = async (req, res) => {
   };
   
   // Get all race data
-  const getRaceData = async (req, res) => {
+  const getRaces = async (req, res) => {
     try {
       const races = await Race.find();
       res.json(races);
@@ -182,6 +184,7 @@ module.exports = {
     getProfile,
     logoutUser,
     createCharacter,
-    getClassData,
-    getRaceData
+    getClasses,
+    getRaces,
+    getCharactersByUser
 }
