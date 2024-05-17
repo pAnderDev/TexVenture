@@ -9,10 +9,23 @@ const CreateCharacter = () => {
         name: '',
         classId: '',
         raceId: '',
+        level: 1,
+        stats: {
+          strength: 10,
+          dexterity: 10,
+          constitution: 10,
+          intelligence: 10,
+          wisdom: 10,
+          charisma: 10
+        },
+        backgroundId: '',
+        hitPoints: 10,
+        experience: 0
     });
 
     const [classes, setClasses] = useState([]);
     const [races, setRaces] = useState([]);
+    const [backgrounds, setBackgrounds] = useState([]);
 
   useEffect(() => {
     // Fetch classes and races from the server
@@ -20,6 +33,7 @@ const CreateCharacter = () => {
       try {
         const classResponse = await axios.get('/classes'); //getting all the classes in the database
         const raceResponse = await axios.get('/races'); //getting all the races in the database 
+        const backgroundResponse = await axios.get('/backgrounds');
         //setting the requested data into our classes and races variables
         setClasses(classResponse.data); 
         setRaces(raceResponse.data);
@@ -37,7 +51,6 @@ const CreateCharacter = () => {
   };
 
   const handleSubmit = async (e) => {
-    console.log(data.classId + ' ' + data.raceId);
     e.preventDefault();
     try {
       const response = await axios.post('/create', data, { withCredentials: true });

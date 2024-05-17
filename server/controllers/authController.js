@@ -3,6 +3,7 @@ const User = require('../models/User')
 const Character = require('../models/Character')
 const Race = require('../models/Race')
 const Class = require('../models/Class')
+const Backgrounds = require('../models/Backgrounds')
 const { hashPassword, comparePasswords } = require('../helpers/auth')
 const jwt = require('jsonwebtoken');
 
