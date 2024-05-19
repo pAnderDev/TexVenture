@@ -86,7 +86,7 @@ const createCharacter = async (req, res) => {
             if(err) return res.json({error: "Invalid token"});
 
             try {
-                const {name, classId, raceId} = req.body;
+                const {name, classId, raceId, backgroundId} = req.body;
 
                 // Make sure the classID and raceID are correctly passed
                 if (!classId || !raceId) {
@@ -95,6 +95,7 @@ const createCharacter = async (req, res) => {
   
                 const selectedClass = await Class.findById(classId);
                 const selectedRace = await Race.findById(raceId);
+                const selectedBackground = await Backgrounds.findById(backgroundId);
 
                 if (!selectedClass || !selectedRace) {
                     return res.status(404).json({ error: "Class or Race not found" });
@@ -105,6 +106,7 @@ const createCharacter = async (req, res) => {
                     name,
                     class: selectedClass.name,
                     race: selectedRace.name,
+                    background: selectedBackground.name
                 });
 
                 return res.json(newCharacter);
@@ -160,6 +162,16 @@ const getClasses = async (req, res) => {
     }
   };
 
+  const getBackgrounds = async (req, res) => {
+    try {
+      const backgrounds = await Backgrounds.find();
+      res.json(backgrounds);
+    } catch (error) {
+      console.error('Error fetching backgrounds data:', error);
+      res.status(500).json({ error: 'Server error' });
+    }
+  };
+
 
 const getProfile = (req, res) => {
     const{token} = req.cookies
@@ -187,5 +199,6 @@ module.exports = {
     createCharacter,
     getClasses,
     getRaces,
-    getCharactersByUser
+    getCharactersByUser,
+    getBackgrounds
 }

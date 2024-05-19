@@ -37,6 +37,7 @@ const CreateCharacter = () => {
         //setting the requested data into our classes and races variables
         setClasses(classResponse.data); 
         setRaces(raceResponse.data);
+        setBackgrounds(backgroundResponse.data)
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -94,6 +95,15 @@ const CreateCharacter = () => {
             <option value="">Select Race</option>
             {races.map(r => (
               <option key={r._id} value={r._id}>{r.name}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label>Background:</label>
+          <select name="backgroundId" value={data.backgroundId} onChange={handleChange}>
+            <option value="">Select Background</option>
+            {backgrounds.map(b => (
+              <option key={b._id} value={b._id}>{b.name}</option>
             ))}
           </select>
         </div>
