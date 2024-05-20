@@ -4,28 +4,33 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 
 const CreateCharacter = () => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const defaultStats = [15, 14, 13, 12, 10, 8];
+    const pointBuyCost = { 8: 0, 9: 1, 10: 2, 11: 3, 12: 4, 13: 5, 14: 7, 15: 9 };
     const [data, setData] = useState({
         name: '',
         classId: '',
         raceId: '',
+        backgroundId: '',
         level: 1,
         stats: {
-          strength: 10,
-          dexterity: 10,
-          constitution: 10,
-          intelligence: 10,
-          wisdom: 10,
-          charisma: 10
+          strength: 8,
+          dexterity: 8,
+          constitution: 8,
+          intelligence: 8,
+          wisdom: 8,
+          charisma: 8
         },
-        backgroundId: '',
         hitPoints: 10,
-        experience: 0
+        experience: 0,
+        spellslots: ''
     });
 
     const [classes, setClasses] = useState([]);
     const [races, setRaces] = useState([]);
     const [backgrounds, setBackgrounds] = useState([]);
+    const [pointBuy, setPointBuy] = useState(true);
+    const [points, setPoints] = useState(27);
 
   useEffect(() => {
     // Fetch classes and races from the server
@@ -48,7 +53,47 @@ const CreateCharacter = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setData({ ...data, [name]: value });
+    if(name in data.stats) {
+      const newStatValue = parseInt(value);
+      const oldStatValue = data.stats[name];
+      const pointDifference = pointBuyCost[newStatValue] - pointBuyCost[oldStatValue];
+
+      if(points - pointDifference >= 0) {
+        setData({
+          ...data, stats: {...data.stats, [name]: newStatValue }
+        });
+        setPoints(points - pointDifference);
+      }
+    } else {
+      setData({ ...data, [name]: value });
+    }
+  };
+
+  const handleMethodChange = (e) => {
+    setPointBuy(e.target.value === 'pointBuy');
+    setPoints(27); // Reset points when switching methods
+    setData({
+      ...data,
+      stats: {
+        strength: 8,
+        dexterity: 8,
+        constitution: 8,
+        intelligence: 8,
+        wisdom: 8,
+        charisma: 8
+      }
+    });
+  };
+
+  const handleDefaultStatChange = (stat, value) => {
+    const updatedStats = { ...data.stats };
+    for (let key in updatedStats) {
+      if (updatedStats[key] === value) {
+        updatedStats[key] = 10;
+      }
+    }
+    updatedStats[stat] = value;
+    setData({ ...data, stats: updatedStats });
   };
 
   const handleSubmit = async (e) => {
@@ -107,6 +152,48 @@ const CreateCharacter = () => {
             ))}
           </select>
         </div>
+        <div>
+          <label>Method:</label>
+          <div>
+            <label>Point Buy</label>
+            <input type="radio" name='method' value="pointBuy" checked={pointBuy} onChange={handleMethodChange} />
+            <label>Default Stats</label>
+            <input type="radio" name='method' value="default" checked={!pointBuy} onChange={handleMethodChange} />
+          </div>
+        </div>
+        {pointBuy ? (
+          <div>
+            <h3>Stats (Points Left: {points})</h3>
+            {Object.keys(data.stats).map(stat => (
+              <div key={stat}>
+                <label>{stat.charAt(0).toUpperCase() + stat.slice(1)}:</label>
+                <select name={stat} value={data.stats[stat]} onChange={handleChange}>
+                  {Object.keys(pointBuyCost).map(value => (
+                    <option key={value} value={value}>{value}</option>
+                  ))}
+                </select>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div>
+            <h3>Assign Default Stats:</h3>
+            {Object.keys(data.stats).map(stat => (
+              <div key={stat}>
+                <label>{stat.charAt(0).toUpperCase() + stat.slice(1)}:</label>
+                <select
+                  value={data.stats[stat]}
+                  onChange={(e) => handleDefaultStatChange(stat, parseInt(e.target.value))}
+                >
+                  <option value={10}>10</option>
+                  {defaultStats.map(value => (
+                    <option key={value} value={value}> {value} </option>
+                  ))}
+                </select>
+              </div>
+            ))}
+          </div>
+        )}
         <button type="submit">Create Character</button>
       </form>
       <button onClick={handlePlayGame}>Play Game</button>

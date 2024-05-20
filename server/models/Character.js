@@ -27,12 +27,12 @@ const characterSchema = new Schema({
         default: 1
     },
     stats: {
-        strength: { type: Number, required: true, default: 10 },
-        dexterity: { type: Number, required: true, default: 10 },
-        constitution: { type: Number, required: true, default: 10 },
-        intelligence: { type: Number, required: true, default: 10 },
-        wisdom: { type: Number, required: true, default: 10 },
-        charisma: { type: Number, required: true, default: 10 }
+        strength: { type: Number, required: true, default: 8 },
+        dexterity: { type: Number, required: true, default: 8 },
+        constitution: { type: Number, required: true, default: 8 },
+        intelligence: { type: Number, required: true, default: 8 },
+        wisdom: { type: Number, required: true, default: 8 },
+        charisma: { type: Number, required: true, default: 8 }
     },
     inventory: [{
         item: { type: String },
@@ -58,8 +58,7 @@ const characterSchema = new Schema({
         default: 10
     },
     spellSlots: {
-        type: Map,
-        of: Number
+        type: Number
     }
     });
 

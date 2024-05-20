@@ -86,10 +86,10 @@ const createCharacter = async (req, res) => {
             if(err) return res.json({error: "Invalid token"});
 
             try {
-                const {name, classId, raceId, backgroundId} = req.body;
+                const {name, classId, raceId, backgroundId, stats } = req.body;
 
                 // Make sure the classID and raceID are correctly passed
-                if (!classId || !raceId) {
+                if (!classId || !raceId || !stats) {
                     return res.status(400).json({ error: "classID and raceID are required"});
                 }
   
@@ -97,8 +97,8 @@ const createCharacter = async (req, res) => {
                 const selectedRace = await Race.findById(raceId);
                 const selectedBackground = await Backgrounds.findById(backgroundId);
 
-                if (!selectedClass || !selectedRace) {
-                    return res.status(404).json({ error: "Class or Race not found" });
+                if (!selectedClass || !selectedRace || !selectedBackground) {
+                    return res.status(404).json({ error: "Class, Race, or Background not found" });
                 }
                 
                 const newCharacter = await Character.create({
@@ -106,7 +106,15 @@ const createCharacter = async (req, res) => {
                     name,
                     class: selectedClass.name,
                     race: selectedRace.name,
-                    background: selectedBackground.name
+                    background: selectedBackground.name,
+                    stats: {
+                        strength: stats.strength,
+                        dexterity: stats.dexterity,
+                        constitution: stats.constitution,
+                        intelligence: stats.intelligence,
+                        wisdom: stats.wisdom,
+                        charisma: stats.charisma
+                    }
                 });
 
                 return res.json(newCharacter);
