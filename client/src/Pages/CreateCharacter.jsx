@@ -74,13 +74,20 @@ const CreateCharacter = () => {
     setPoints(27); // Reset points when switching methods
     setData({
       ...data,
-      stats: {
+      stats: e.target.value == 'pointBuy' ? {
         strength: 8,
         dexterity: 8,
         constitution: 8,
         intelligence: 8,
         wisdom: 8,
         charisma: 8
+      } : {
+        strength: 0,
+        dexterity: 0,
+        constitution: 0,
+        intelligence: 0,
+        wisdom: 0,
+        charisma: 0
       }
     });
   };
@@ -89,7 +96,7 @@ const CreateCharacter = () => {
     const updatedStats = { ...data.stats };
     for (let key in updatedStats) {
       if (updatedStats[key] === value) {
-        updatedStats[key] = 10;
+        updatedStats[key] = 0;
       }
     }
     updatedStats[stat] = value;
@@ -133,6 +140,9 @@ const CreateCharacter = () => {
               <option key={c._id} value={c._id}>{c.name}</option>
             ))}
           </select>
+        </div>
+        <div>
+          <label>Level: {data.level}</label>
         </div>
         <div>
           <label>Race:</label>
@@ -185,7 +195,7 @@ const CreateCharacter = () => {
                   value={data.stats[stat]}
                   onChange={(e) => handleDefaultStatChange(stat, parseInt(e.target.value))}
                 >
-                  <option value={10}>10</option>
+                  <option value={0}>Select</option>
                   {defaultStats.map(value => (
                     <option key={value} value={value}> {value} </option>
                   ))}

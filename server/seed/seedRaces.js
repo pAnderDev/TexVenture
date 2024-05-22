@@ -11,59 +11,69 @@ if (process.argv[2] !== SEED_AUTH_KEY) {
 
 const races = [
   {
-    name: 'Elf',
-  },
-  {
-    name: 'Human',
-  },
-  {
     name: 'Dwarf',
+    bonuses: {
+      constitution: 2,
+      wisdom: 1
+    }
   },
   {
-    name: 'Orc',
-  },
-  {
-    name: 'Half-Elf',
-  },
-  {
-    name: 'Drow',
+    name: 'Elf',
+    bonuses: {
+      dexterity: 2,
+      wisdom: 1
+    }
   },
   {
     name: 'Halfling',
+    bonuses: {
+      dexterity: 2,
+      charisma: 1
+    }
+  },
+  {
+    name: 'Human',
+    bonuses: {
+      strength: 1,
+      dexterity: 1,
+      constitution: 1
+    }
   },
   {
     name: 'Dragonborn',
+    bonuses: {
+      strength: 2,
+      charisma: 1,
+    }
   },
   {
-    name: 'Forest Gnome',
+    name: 'Gnome',
+    bonuses: {
+      intelligence: 3
+    }
   },
   {
-    name: 'Rock Gnome',
-  },
-  {
-    name: 'High Elf',
-  },
-  {
-    name: 'Tiefling',
-  },
-  {
-    name: 'Mountain Dwarf',
+    name: 'Half-Elf',
+    bonuses: {
+      charisma: 1,
+      dexterity: 1,
+      intelligence: 1
+    }
   },
   {
     name: 'Half-Orc',
+    bonuses: {
+      strength: 2,
+      constitution: 1,
+    }
   },
   {
-    name: 'Stout Halfling',
+    name: 'Tiefling',
+    bonuses: {
+      charisma: 2,
+      intelligence: 1
+    }
   },
-  {
-    name: 'Hill Dwarf',
-  },
-  {
-    name: 'Wood Elf',
-  },
-  {
-    name: 'Lightfoot Halfling',
-  }
 ];
 
 mongoose.connect(process.env.MONGO_URL)

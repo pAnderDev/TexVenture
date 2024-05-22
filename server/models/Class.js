@@ -9,6 +9,11 @@ const classSchema = new Schema({
       'Barbarian', 'Bard', 'Cleric', 'Druid', 'Fighter', 'Monk', 
       'Paladin', 'Ranger', 'Rogue', 'Sorcerer', 'Warlock', 'Wizard'
     ]
+  },
+  hitDie: { 
+    type: Number, 
+    required: true,
+    default: 0 
   }
 });
 

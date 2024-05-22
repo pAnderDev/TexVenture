@@ -100,6 +100,17 @@ const createCharacter = async (req, res) => {
                 if (!selectedClass || !selectedRace || !selectedBackground) {
                     return res.status(404).json({ error: "Class, Race, or Background not found" });
                 }
+
+                //apply racial bonuses
+                const raceBonuses = selectedRace.bonuses;
+                const adjustedStats = {
+                    strength: stats.strength + (racialBonuses.strength || 0),
+                    dexterity: stats.dexterity + (racialBonuses.dexterity || 0),
+                    constitution: stats.constitution + (racialBonuses.constitution || 0),
+                    intelligence: stats.intelligence + (racialBonuses.intelligence || 0),
+                    wisdom: stats.wisdom + (racialBonuses.wisdom || 0),
+                    charisma: stats.charisma + (racialBonuses.charisma || 0),
+                }
                 
                 const newCharacter = await Character.create({
                     user: user.id,
@@ -149,26 +160,41 @@ const getCharactersByUser = async (req, res) => {
     }
 };
 
-const getClasses = async (req, res) => {
-    try {
-      const classes = await Class.find();
-      res.json(classes);
-    } catch (error) {
-      console.error('Error fetching class data:', error);
-      res.status(500).json({ error: 'Server error' });
-    }
-  };
+    const getClasses = async (req, res) => {
+        try {
+        const classes = await Class.find();
+        res.json(classes);
+        } catch (error) {
+        console.error('Error fetching class data:', error);
+        res.status(500).json({ error: 'Server error' });
+        }
+    };
+
+    const getRacialBonuses = async (req, res) => {
+        try {
+            const { raceId } = req.params;
+            console.log('${raceId}');
+            const racialBonuses = await Race.findById(raceId);
+            if(!racialBonuses) {
+                return res.status(400).json({error: 'Race not found' });
+            }
+            res.json(racialBonuses.bonuses);
+        } catch (error) {
+            console.error('Error fetching racial bonuses:', error);
+            res.status(500).json({error: 'Server error' });
+        }
+    };
   
-  // Get all race data
-  const getRaces = async (req, res) => {
-    try {
-      const races = await Race.find();
-      res.json(races);
-    } catch (error) {
-      console.error('Error fetching race data:', error);
-      res.status(500).json({ error: 'Server error' });
-    }
-  };
+    // Get all race data
+    const getRaces = async (req, res) => {
+        try {
+        const races = await Race.find();
+        res.json(races);
+        } catch (error) {
+        console.error('Error fetching race data:', error);
+        res.status(500).json({ error: 'Server error' });
+        }
+    };
 
   const getBackgrounds = async (req, res) => {
     try {
@@ -208,5 +234,6 @@ module.exports = {
     getClasses,
     getRaces,
     getCharactersByUser,
-    getBackgrounds
+    getBackgrounds,
+    getRacialBonuses
 }

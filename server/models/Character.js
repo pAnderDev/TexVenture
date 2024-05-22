@@ -52,14 +52,6 @@ const characterSchema = new Schema({
         required: true,
         default: 0
     },
-    hitPoints: {
-        type: Number,
-        required: true,
-        default: 10
-    },
-    spellSlots: {
-        type: Number
-    }
     });
 
 const CharacterModel = mongoose.model('Character', characterSchema);
