@@ -81,18 +81,18 @@ const loginUser = async (req, res) => {
 const createCharacter = async (req, res) => {
     const { token } = req.cookies;
     
-    if(token) {
+    if (token) {
         jwt.verify(token, process.env.JWT_SECRET, {}, async (err, user) => {
-            if(err) return res.json({error: "Invalid token"});
+            if (err) return res.json({ error: "Invalid token" });
 
             try {
-                const {name, classId, raceId, backgroundId, stats } = req.body;
+                const { name, classId, raceId, backgroundId, stats } = req.body;
 
-                // Make sure the classID and raceID are correctly passed
+                // Make sure the classID, raceID, and stats are correctly passed
                 if (!classId || !raceId || !stats) {
-                    return res.status(400).json({ error: "classID and raceID are required"});
+                    return res.status(400).json({ error: "classID, raceID, and stats are required" });
                 }
-  
+
                 const selectedClass = await Class.findById(classId);
                 const selectedRace = await Race.findById(raceId);
                 const selectedBackground = await Backgrounds.findById(backgroundId);
@@ -101,43 +101,36 @@ const createCharacter = async (req, res) => {
                     return res.status(404).json({ error: "Class, Race, or Background not found" });
                 }
 
-                //apply racial bonuses
+                // Apply racial bonuses
                 const raceBonuses = selectedRace.bonuses;
                 const adjustedStats = {
-                    strength: stats.strength + (racialBonuses.strength || 0),
-                    dexterity: stats.dexterity + (racialBonuses.dexterity || 0),
-                    constitution: stats.constitution + (racialBonuses.constitution || 0),
-                    intelligence: stats.intelligence + (racialBonuses.intelligence || 0),
-                    wisdom: stats.wisdom + (racialBonuses.wisdom || 0),
-                    charisma: stats.charisma + (racialBonuses.charisma || 0),
-                }
-                
+                    strength: stats.strength + (raceBonuses.strength || 0),
+                    dexterity: stats.dexterity + (raceBonuses.dexterity || 0),
+                    constitution: stats.constitution + (raceBonuses.constitution || 0),
+                    intelligence: stats.intelligence + (raceBonuses.intelligence || 0),
+                    wisdom: stats.wisdom + (raceBonuses.wisdom || 0),
+                    charisma: stats.charisma + (raceBonuses.charisma || 0),
+                };
+
                 const newCharacter = await Character.create({
                     user: user.id,
                     name,
                     class: selectedClass.name,
                     race: selectedRace.name,
                     background: selectedBackground.name,
-                    stats: {
-                        strength: stats.strength,
-                        dexterity: stats.dexterity,
-                        constitution: stats.constitution,
-                        intelligence: stats.intelligence,
-                        wisdom: stats.wisdom,
-                        charisma: stats.charisma
-                    }
+                    stats: adjustedStats, // Use adjusted stats here
                 });
 
                 return res.json(newCharacter);
-            } catch(error) {
+            } catch (error) {
                 console.log(error);
-                return res.json({error: "Failed to create character"});
+                return res.json({ error: "Failed to create character" });
             }
         });
     } else {
-        res.json({error: "No token provided"});
+        res.json({ error: "No token provided" });
     }
-};
+}
 
 const getCharactersByUser = async (req, res) => {
     const { token } = req.cookies;
@@ -169,21 +162,6 @@ const getCharactersByUser = async (req, res) => {
         res.status(500).json({ error: 'Server error' });
         }
     };
-
-    const getRacialBonuses = async (req, res) => {
-        try {
-            const { raceId } = req.params;
-            console.log('${raceId}');
-            const racialBonuses = await Race.findById(raceId);
-            if(!racialBonuses) {
-                return res.status(400).json({error: 'Race not found' });
-            }
-            res.json(racialBonuses.bonuses);
-        } catch (error) {
-            console.error('Error fetching racial bonuses:', error);
-            res.status(500).json({error: 'Server error' });
-        }
-    };
   
     // Get all race data
     const getRaces = async (req, res) => {
@@ -205,6 +183,35 @@ const getCharactersByUser = async (req, res) => {
       res.status(500).json({ error: 'Server error' });
     }
   };
+
+  const getRacialBonusesById = async (req, res) => {
+    try {
+        const { raceId } = req.params;
+        const racialBonuses = await Race.findById(raceId);
+        if(!racialBonuses) {
+            return res.status(400).json({error: 'Race not found' });
+        }
+        res.json(racialBonuses);
+    } catch (error) {
+        console.error('Error fetching racial bonuses:', error);
+        res.status(500).json({error: 'Server error' });
+    }
+};
+
+  const getBackgroundById = async (req, res) => {
+    try {
+        const { backgroundId } = req.params;
+        const background = await Backgrounds.findById(backgroundId);
+        if (!background) {
+            return res.status(404).json({ error: 'Background not found' });
+        }
+        res.json(background);
+    } catch (error) {
+        console.error('Error fetching background:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+};
+
 
 
 const getProfile = (req, res) => {
@@ -235,5 +242,6 @@ module.exports = {
     getRaces,
     getCharactersByUser,
     getBackgrounds,
-    getRacialBonuses
+    getRacialBonusesById,
+    getBackgroundById
 }

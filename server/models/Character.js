@@ -34,14 +34,14 @@ const characterSchema = new Schema({
         wisdom: { type: Number, required: true, default: 8 },
         charisma: { type: Number, required: true, default: 8 }
     },
-    inventory: [{
-        item: { type: String },
-        quantity: { type: Number, default: 1 }
-    }],
-    abilities: [{
-        name: { type: String },
-        description: { type: String }
-    }],
+    // inventory: [{
+    //     item: { type: String },
+    //     quantity: { type: Number, default: 1 }
+    // }],
+    // abilities: [{
+    //     name: { type: String },
+    //     description: { type: String }
+    // }],
     background: {
         type: String,
         ref: 'Backgrounds',
