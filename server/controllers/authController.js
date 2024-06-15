@@ -37,7 +37,7 @@ const registerUser = async (req, res) => {
             email, 
             password: hashedPassword,
             date_created: new Date(),
-            last_login: new Date()
+            last_login: new Date(),
         })
 
         return res.json(user)
@@ -129,6 +129,31 @@ const createCharacter = async (req, res) => {
         });
     } else {
         res.json({ error: "No token provided" });
+    }
+}
+
+const selectCharacter = async (req, res) => {
+    const { token } = req.cookies; //get the user who sent request
+    const { characterId } = req.body;
+
+    if(token) {
+        jwt.verify(token, process.env.JWT_SECRET, {}, async (err, user) => {
+            if(err) return res.json({error: "Invalid token"});
+
+            try {
+                //gather the list of all characters 
+                const updatedUser = await User.findByIdAndUpdate(user.id, { selectedCharacter: characterId }, { new: true });
+                if (!updatedUser) {
+                    return res.status(404).json({ error: "User not found" });
+                }
+                return res.json({ message: "Character selected successfully", user: updatedUser });
+            } catch (error) {
+                console.log("Error selecting character:", error);
+                return res.status(500).json({ error: "Failed to select character" });
+            }
+        });
+    } else {
+        res.json({error: "No token provided"});
     }
 }
 
@@ -238,6 +263,7 @@ module.exports = {
     getProfile,
     logoutUser,
     createCharacter,
+    selectCharacter,
     getClasses,
     getRaces,
     getCharactersByUser,

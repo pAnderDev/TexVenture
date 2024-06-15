@@ -10,7 +10,13 @@ const userSchema = new Schema({
     },
     password: {type: String, required: true},
     date_created: Date,
-    last_login: Date
+    last_login: Date,
+    selectedCharacter: {
+        type: Schema.Types.ObjectId,
+        ref: 'Character',
+        required: true,
+        default: null}
+
 })
 
 const UserModel = mongoose.model('User', userSchema);
