@@ -9,6 +9,7 @@ import Register from './Pages/Register.jsx';
 import Login from './Pages/Login.jsx';
 import CreateCharacter from './Pages/CreateCharacter.jsx';
 import SelectCharacter from './Pages/SelectCharacter.jsx';
+import Prompt from './Pages/Prompt.jsx';
 import axios from 'axios';
 import { Toaster } from "react-hot-toast"
 import { UserContextProvider } from '../context/userContext.jsx';
@@ -36,6 +37,7 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/create" element={<CreateCharacter />} />
                 <Route path="/characters" element={<SelectCharacter />} />
+                <Route path="/gameplay" element={<Prompt />} />
               </Routes>
             </div>
           </div>

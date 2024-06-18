@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router()
 const cors = require('cors')
-const { registerUser, loginUser, getProfile, logoutUser, createCharacter, getClasses, getRaces, getCharactersByUser, getBackgrounds, getRacialBonusesById, getBackgroundById, selectCharacter} = require('../controllers/authController')
+const { registerUser, loginUser, getProfile, logoutUser, createCharacter, getClasses, getRaces, getCharactersByUser, getBackgrounds, getRacialBonusesById, getBackgroundById, selectCharacter, openaiEndpoint } = require('../controllers/authController')
 
 //middleware
 router.use(
@@ -23,6 +23,8 @@ router.get('/races/:raceId', getRacialBonusesById)
 router.get('/characters', getCharactersByUser)
 router.get('/backgrounds', getBackgrounds)
 router.get('/backgrounds/:backgroundId', getBackgroundById)
+router.post('/gameplay', openaiEndpoint)
+
 
 
 module.exports = router

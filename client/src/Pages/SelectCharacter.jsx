@@ -43,6 +43,10 @@ const UserCharacters = () => {
     }
   };
 
+  const handlePlayButton = () => {
+    navigate('/gameplay');
+  };
+
   return (
     <div>
       <h2>Your Characters</h2>
@@ -61,6 +65,7 @@ const UserCharacters = () => {
       </div>
       <button onClick={handleHomeButton}>Home</button>
       <button onClick={handleCreateCharacter}>Create Character</button>
+      <button onClick={handlePlayButton}>Play</button>
     </div>
   );
 };
