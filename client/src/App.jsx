@@ -9,14 +9,14 @@ import Register from './Pages/Register.jsx';
 import Login from './Pages/Login.jsx';
 import CreateCharacter from './Pages/CreateCharacter.jsx';
 import SelectCharacter from './Pages/SelectCharacter.jsx';
-import Prompt from './Pages/Prompt.jsx';
+import Gameplay from './Pages/Gameplay.jsx';
 import axios from 'axios';
 import { Toaster } from "react-hot-toast"
 import { UserContextProvider } from '../context/userContext.jsx';
 import Account from './Pages/Account.jsx';
 import './App.css';
 
-axios.defaults.baseURL = 'http://localhost:5050'
+axios.defaults.baseURL = 'http://localhost:5173'
 axios.defaults.withCredentials = true
 
 function App() {
@@ -37,7 +37,7 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/create" element={<CreateCharacter />} />
                 <Route path="/characters" element={<SelectCharacter />} />
-                <Route path="/gameplay" element={<Prompt />} />
+                <Route path="/gameplay" element={<Gameplay />} />
               </Routes>
             </div>
           </div>
