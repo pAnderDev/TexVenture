@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "mongodb": "^6.20.0",
     "openai": "^4.0.0"
   }
 }
